@@ -4,15 +4,11 @@ using Orders.Infrastructure.Persistence;
 using Users.Infrastructure.Persistence;
 using Shared.Events;
 using Microsoft.EntityFrameworkCore;
+using Shared.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Создаём директорию для SQLite если её нет
-var dataDirectory = Path.Combine(Directory.GetCurrentDirectory(), "data");
-if (!Directory.Exists(dataDirectory))
-{
-    Directory.CreateDirectory(dataDirectory);
-}
+var dataDirectory = DatabasePathHelper.GetDataDirectory();
 AppDomain.CurrentDomain.SetData("DataDirectory", dataDirectory);
 builder.Services.AddHealthChecks();
 
@@ -58,7 +54,6 @@ using (var scope = app.Services.CreateScope())
         app.Logger.LogError(ex, "Error migrating Orders database");
     }
 }
-
 var eventBus = app.Services.GetRequiredService<IEventBus>();
 
 // Настраиваем подписки для каждого модуля

@@ -9,10 +9,7 @@ public static class DatabasePathHelper
         if (_cachedDataDirectory != null)
             return _cachedDataDirectory;
 
-        // Находим базовую директорию (корень solution или стартовый проект)
-        var baseDirectory = FindBaseDirectory();
-
-        var dataDirectory = Path.Combine(baseDirectory, "data");
+        var dataDirectory = FindDataDirectory();
 
         if (!Directory.Exists(dataDirectory))
         {
@@ -21,8 +18,7 @@ public static class DatabasePathHelper
 
         _cachedDataDirectory = Path.GetFullPath(dataDirectory);
 
-        Console.WriteLine($"[DatabasePathHelper] Base Directory -> {baseDirectory}");
-        Console.WriteLine($"[DatabasePathHelper] Data Directory -> {_cachedDataDirectory}");
+        Console.WriteLine($"[DatabasePathHelper] >>> FINAL Data Directory: {_cachedDataDirectory}");
 
         return _cachedDataDirectory;
     }
@@ -30,41 +26,70 @@ public static class DatabasePathHelper
     public static string GetDatabasePath(string dbName)
     {
         var dataDirectory = GetDataDirectory();
-        var dbPath = Path.Combine(dataDirectory, dbName);
-
-        Console.WriteLine($"[DatabasePathHelper] {dbName} -> {Path.GetFullPath(dbPath)}");
-
-        return dbPath;
+        return Path.Combine(dataDirectory, dbName);
     }
 
-    private static string FindBaseDirectory()
+    private static string FindDataDirectory()
     {
-        // Ищем директорию с .sln файлом или Program.cs
-        var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
+        Console.WriteLine("=======================================================");
+        Console.WriteLine($"[DatabasePathHelper] Current Directory: {Directory.GetCurrentDirectory()}");
+        Console.WriteLine($"[DatabasePathHelper] AppContext.BaseDirectory: {AppContext.BaseDirectory}");
+        Console.WriteLine("=======================================================");
 
-        while (directory != null)
+        // Ищем .sln
+        var currentDir = new DirectoryInfo(Directory.GetCurrentDirectory());
+        DirectoryInfo? solutionDir = null;
+
+        var dir = currentDir;
+        while (dir != null)
         {
-            Console.WriteLine($"[DatabasePathHelper] Checking directory: {directory.FullName}");
-
-            // Ищем .sln файл (корень solution)
-            if (directory.GetFiles("*.sln").Any())
+            if (dir.GetFiles("*.sln").Any())
             {
-                Console.WriteLine($"[DatabasePathHelper] Found solution directory: {directory.FullName}");
-                return directory.FullName;
+                solutionDir = dir;
+                Console.WriteLine($"[DatabasePathHelper] Found .sln in: {solutionDir.FullName}");
+                break;
             }
-
-            // Ищем Program.cs (стартовый проект)
-            if (File.Exists(Path.Combine(directory.FullName, "Program.cs")))
-            {
-                Console.WriteLine($"[DatabasePathHelper] Found project directory: {directory.FullName}");
-                return directory.FullName;
-            }
-
-            directory = directory.Parent;
+            dir = dir.Parent;
         }
 
-        // Fallback на текущую директорию
-        Console.WriteLine($"[DatabasePathHelper] Using fallback directory: {Directory.GetCurrentDirectory()}");
-        return Directory.GetCurrentDirectory();
+        if (solutionDir == null)
+        {
+            Console.WriteLine("[DatabasePathHelper] No .sln found, using current directory");
+            return Path.Combine(Directory.GetCurrentDirectory(), "data");
+        }
+
+        // Ищем все Program.cs в solution (кроме bin/obj)
+        Console.WriteLine($"[DatabasePathHelper] Searching for Program.cs in: {solutionDir.FullName}");
+
+        var programFiles = Directory.GetFiles(
+            solutionDir.FullName,
+            "Program.cs",
+            SearchOption.AllDirectories)
+            .Where(p => !p.Contains($"{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}")
+                     && !p.Contains($"{Path.DirectorySeparatorChar}obj{Path.DirectorySeparatorChar}"))
+            .ToList();
+
+        Console.WriteLine($"[DatabasePathHelper] Found {programFiles.Count} Program.cs files:");
+        foreach (var p in programFiles)
+        {
+            Console.WriteLine($"[DatabasePathHelper]   → {p}");
+        }
+
+        if (programFiles.Count == 0)
+        {
+            Console.WriteLine("[DatabasePathHelper] No Program.cs found, using solution dir");
+            return Path.Combine(solutionDir.FullName, "data");
+        }
+
+        // Ищем Program.cs, наиболее близкий к solution (т.е. стартовый проект)
+        // Берем тот, у которого путь самый короткий от solution
+        var startupProgram = programFiles
+            .OrderBy(p => p.Length)
+            .First();
+
+        var startupDir = Path.GetDirectoryName(startupProgram)!;
+        Console.WriteLine($"[DatabasePathHelper] Startup project dir: {startupDir}");
+
+        return Path.Combine(startupDir, "data");
     }
 }
