@@ -1,118 +1,135 @@
-﻿# Modular Monolith with Outbox Pattern
+﻿# Orders Module
 
-## 📝 Описание проекта
+Модуль управления заказами в системе.
 
-Это учебный проект, демонстрирующий архитектуру **модульного монолита** с подготовкой к будущему разделению на микросервисы. Проект показывает, как организовать модульную структуру, настроить взаимодействие между модулями и реализовать паттерн **Transactional Outbox** для надежной публикации событий.
+## 🎯 Назначение
 
-## 🎯 Цели проекта
-
-- Изучение принципов модульного монолита
-- Понимание паттерна Transactional Outbox
-- Подготовка к миграции на микросервисную архитектуру
-- Практика работы с несколькими DbContext
-- Освоение event-driven архитектуры
+Модуль отвечает за жизненный цикл заказов:
+- Создание заказов
+- Обновление статуса и данных заказа
+- Удаление заказов
+- Публикация доменных событий для других модулей
 
 ## 🏗️ Архитектура
 
-### Модульная структура
+Модуль построен по принципам Clean Architecture:
 ```
-ModularMonolit/
-├── src/
-│ ├── ModularMonolit.Api/ # Startup проект
-│ ├── Users/ # Модуль пользователей
-│ │ ├── Users.Domain/ # Доменные сущности
-│ │ ├── Users.Application/ # Бизнес-логика
-│ │ ├── Users.Infrastructure/ # Доступ к данным
-│ │ └── Users.Presentation/ # контроллеры
-│ │
-│ ├── Orders/ # Модуль заказов
-│ │ ├── Orders.Domain/
-│ │ ├── Orders.Application/
-│ │ ├── Orders.Infrastructure/
-│ │ └── Orders.Presentation/
-│ │
-│ └── Shared/ # Общие компоненты
-│ ├── Shared.Abstractions/ # Интерфейсы
-│ ├── Shared.Events/ # Контракты событий
-│ └── Shared.Outbox/ # Outbox паттерн
-```
-
-### Взаимодействие модулей
-```
-[Users Module] [Orders Module]
-│ │
-│ База данных users.db │ База данных orders.db
-│ ├── Users │ ├── Orders
-│ └── OutboxMessages │ └── OutboxMessages
-│ │
-└────────── Event Bus ─────────────┘
+Orders/
+├── Orders.Domain/ # Доменные сущности и правила
+│ ├── Entities/
+│ │ └── Order.cs
+│ └── Repositories/
+│ └── IOrderRepository.cs
+│
+├── Orders.Application/ # Бизнес-логика
+│ ├── Services/
+│ │ └── OrderService.cs
+│ └── EventHandlers/
+│ ├── UserCreatedEventHandler.cs
+│ └── UserUpdatedEventHandler.cs
+│
+├── Orders.Infrastructure/ # Инфраструктура
+│ ├── Persistence/
+│ │ ├── OrderDbContext.cs
+│ │ ├── Migrations/
+│ │ └── Repositories/
+│ └── Outbox/ # См. Shared.Outbox
+│
+└── Orders.Presentation/ # API
+├── Controllers/
+├── Contracts/
+└── OrdersModule.cs # Регистрация модуля
 ```
 
-## 🔄 Паттерн Transactional Outbox
 
-### Как это работает
+## 💾 База данных
 
-1. **Бизнес-операция** выполняется в транзакции
-2. **Событие сохраняется** в таблицу OutboxMessages в той же транзакции
-3. **Фоновый сервис** (OutboxPublisher) отслеживает новые сообщения
-4. **Событие публикуется** в Event Bus
-5. **Обработчики** в других модулях реагируют на событие
+SQLite, находится в src\ModularMonolit\data\orders.db 
 
+**Таблицы:**
+- `Orders` — заказы
+- `OutboxMessages` — исходящие события (Transactional Outbox)
 
-## 📦 Реализованные модули
+## 📤 Публикуемые события
 
-### Users Module
-- **Функциональность**: CRUD операции с пользователями
-- **База данных**: SQLite (users.db)
-- **События**: UserCreatedEvent, UserUpdatedEvent, UserDeletedEvent
-
-### Orders Module
-- **Функциональность**: Управление заказами
-- **База данных**: SQLite (orders.db)
-- **События**: OrderCreatedEvent, OrderUpdatedEvent, OrderCancelledEvent
-- **Обработчики**: Реагирует на события пользователей
-
-## 🛠️ Технологии
-
-- **.NET 8.0**
-- **ASP.NET Core Web API**
-- **Entity Framework Core 8.0**
-- **SQLite**
-- **MediatR** (для CQRS)
-- **FluentValidation**
-- **InMemory Event Bus** (собственная реализация)
-
-## 🚀 Запуск проекта
-
-### Предварительные требования
-
-- .NET 8.0 SDK
-- Visual Studio 2022 или VS Code
-
-### Установка и запуск
-
-```bash
-# Клонировать репозиторий
-git clone ...
-
-# Перейти в директорию проекта
-cd ModularMonolit
-
-# Восстановить зависимости
-dotnet restore
-
-# Применить миграции (автоматически при запуске)
-dotnet run --project src/ModularMonolit.Api
-
-# Для Users модуля
-dotnet ef migrations add MigrationName \
-    --project src/Users.Infrastructure \
-    --startup-project src/ModularMonolit.Api \
-    --output-dir Persistence/Migrations
-
-# Для Orders модуля
-dotnet ef migrations add MigrationName \
-    --project src/Orders.Infrastructure \
-    --startup-project src/ModularMonolit.Api \
-    --output-dir Persistence/Migrations
+Модуль публикует следующие события через Outbox Pattern:
 ```
+| Событие | Когда публикуется |
+|---------|-------------------|
+| `OrderCreatedEvent` | При создании заказа |
+| `OrderUpdatedEvent` | При обновлении заказа |
+| `OrderDeletedEvent` | При удалении заказа |
+```
+### Пример события
+
+```csharp
+public record OrderCreatedEvent
+{
+    public int OrderId { get; init; }
+    public int UserId { get; init; }
+    public decimal TotalAmount { get; init; }
+    public DateTime CreatedAt { get; init; }
+}
+```
+
+### API Endpoints
+```
+GET	/api/orders	            Получить все заказы
+GET	/api/orders/{id}	    Получить заказ по ID
+POST	/api/orders	        Создать заказ
+PUT	/api/orders/{id}	    Обновить заказ
+DELETE	/api/orders/{id}    Удалить заказ
+```
+
+### Паттерн Transactional Outbox
+Все операции записи используют Outbox Pattern для гарантированной доставки событий:
+```
+public async Task<OrderDto> CreateOrderAsync(CreateOrderDto dto)
+{
+    await _unitOfWork.BeginTransactionAsync();
+    
+    // 1. Создаем заказ
+    var order = new Order(dto.UserId, dto.Total);
+    await _orderRepository.AddAsync(order);
+    
+    // 2. Сохраняем событие в Outbox (в той же транзакции)
+    await _outboxService.AddEventAsync(new OrderCreatedEvent(
+        order.Id, order.UserId, order.Total, order.CreatedAt));
+    
+    // 3. Коммитим — либо все, либо ничего
+    await _unitOfWork.SaveChangesAsync();
+    await _unitOfWork.CommitTransactionAsync();
+    
+    return MapToDto(order);
+}
+```
+
+### Взаимодействие с другими модулями
+```
+┌─────────────────────────────────────────────┐
+│                                             │
+│  Orders Module                              │
+│  ┌─────────────┐                            │
+│  │ OrderService│─── publishes ──┐           │
+│  └─────────────┘                │           │
+│                                 ▼           │
+│                          OrderCreatedEvent  │
+│                                 │           │
+└─────────────────────────────────┼───────────┘
+                                  │
+                                  ▼
+                          ┌───────────────┐
+                          │ Users Module  │
+                          │               │
+                          │ OrderCreated  │
+                          │ EventHandler  │
+                          │       │       │
+                          │       ▼       │
+                          │ UserOrder     │
+                          │ Summary       │
+                          └───────────────┘
+```
+### Примечания
+- Модуль не знает о существовании Users модуля напрямую
+- Общение только через события
+- Готов к выделению в отдельный микросервис (нужно только заменить InMemory EventBus на RabbitMQ)

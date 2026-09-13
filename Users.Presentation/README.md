@@ -1,6 +1,6 @@
 ﻿# Users Module
 
-Модуль управления пользователями в системе Modular Monolith.
+Модуль управления пользователями в системе.
 
 ## 🎯 Назначение
 
@@ -81,13 +81,14 @@ SQLite, путь src\ModularMonolit\data\users.db (для удобства)
 
 ## Обрабатываемые события
 Модуль подписан на события из модуля Orders:
-
-Событие	Обработчик	Действие
+```
+     Событие	              Обработчик	                  Действие
 OrderCreatedEvent	OrderCreatedEventHandler	Увеличить TotalOrders, TotalSpent, обновить LastOrderDate
 OrderUpdatedEvent	OrderUpdatedEventHandler	Пересчитать TotalSpent
 OrderDeletedEvent	OrderDeletedEventHandler	Уменьшить TotalOrders, TotalSpent
-
+```
 ## API Endpoints
+```
 Метод	URL	Описание
 GET	/api/users	Получить всех пользователей
 GET	/api/users/{id}	Получить пользователя
@@ -95,6 +96,7 @@ GET	/api/users/{id}/summary	Получить сводку по заказам
 POST	/api/users	Создать пользователя
 PUT	/api/users/{id}	Обновить пользователя
 DELETE	/api/users/{id}	Удалить пользователя
+```
 
 ## Взаимодействие с другими модулями - пример
 ```

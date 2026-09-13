@@ -15,7 +15,7 @@
 ## 🏗️ Архитектура
 
 ### Модульная структура
-
+```
 ModularMonolit/
 ├── src/
 │ ├── ModularMonolit.Api/ # Startup проект
@@ -35,10 +35,10 @@ ModularMonolit/
 │ ├── Shared.Abstractions/ # Интерфейсы
 │ ├── Shared.Events/ # Контракты событий
 │ └── Shared.Outbox/ # Outbox паттерн
-
+```
 
 ### Взаимодействие модулей
-
+```
 [Users Module] [Orders Module]
 │ │
 │ База данных users.db │ База данных orders.db
@@ -46,7 +46,7 @@ ModularMonolit/
 │ └── OutboxMessages │ └── OutboxMessages
 │ │
 └────────── Event Bus ─────────────┘
-
+```
 
 ## 🔄 Паттерн Transactional Outbox
 
@@ -115,3 +115,4 @@ dotnet ef migrations add MigrationName \
     --project src/Orders.Infrastructure \
     --startup-project src/ModularMonolit.Api \
     --output-dir Persistence/Migrations
+```
