@@ -1,4 +1,5 @@
-﻿# Shared.Outbox
+﻿
+# Shared.Outbox
 
 Реализация паттерна **Transactional Outbox** для гарантированной публикации событий.
 
@@ -65,7 +66,7 @@ services.AddScoped<IOutboxService<OrderDbContext>, OutboxService<OrderDbContext>
 
 ## Без generic было бы:
 ❌ DI-контейнер возвращает последнюю зарегистрированную реализацию
-❌ Users получил бы OutboxService<OrderDbContext>
+❌ Users получил бы OutboxService - OrderDbContext (т.к оно последнее регистрируется)
 ❌ События сохранялись бы в чужую БД
 
 ## Полный цикл работы

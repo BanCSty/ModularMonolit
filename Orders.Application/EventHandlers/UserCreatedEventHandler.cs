@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Shared.Events;
 
+
 namespace Orders.Application.EventHandlers;
 
 public class UserCreatedEventHandler : IEventHandler<UserCreatedEvent>

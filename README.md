@@ -39,12 +39,12 @@ ModularMonolit/
 
 ### Взаимодействие модулей
 ```
-[Users Module] [Orders Module]
-│ │
+[Users Module]      [Orders Module]
+│                      │
 │ База данных users.db │ База данных orders.db
-│ ├── Users │ ├── Orders
-│ └── OutboxMessages │ └── OutboxMessages
-│ │
+│ ├── Users │          ├── Orders
+│ └── OutboxMessages   └── OutboxMessages
+│                                  │
 └────────── Event Bus ─────────────┘
 ```
 
@@ -93,7 +93,7 @@ ModularMonolit/
 
 ```bash
 # Клонировать репозиторий
-git clone ...
+git clone https://github.com/BanCSty/ModularMonolit.git
 
 # Перейти в директорию проекта
 cd ModularMonolit

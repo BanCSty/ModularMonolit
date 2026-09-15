@@ -1,6 +1,4 @@
-﻿using System.Collections.ObjectModel;
-
-namespace Orders.Domain.Entities;
+﻿namespace Orders.Domain.Entities;
 
 public class Order
 {

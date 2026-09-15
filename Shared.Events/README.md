@@ -61,8 +61,8 @@ UserService                          OrderService
      │                                       │
      ▼                                       ▼
 ┌─────────────────────────────────────────────────────┐
-│                  InMemoryEventBus                    │
-│                                                      │
+│                  InMemoryEventBus                   │
+│                                                     │
 │  UserCreatedEvent  → [UserCreatedEventHandler]      │
 │  UserUpdatedEvent  → [UserUpdatedEventHandler]      │
 │  OrderCreatedEvent → [OrderCreatedEventHandler]     │

@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace Shared.Abstractions
+﻿namespace Shared.Abstractions
 {
     public interface IUnitOfWork : IDisposable
     {

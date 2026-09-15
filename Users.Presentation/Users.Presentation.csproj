@@ -15,7 +15,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Shared\Shared.csproj" />
+		<ProjectReference Include="..\Shared.Abstractions\Shared.Abstractions.csproj" />
+		<ProjectReference Include="..\Shared.Events\Shared.Events.csproj" />
+		<ProjectReference Include="..\Shared.Infrastructure\Shared.Infrastructure.csproj" />
+		<ProjectReference Include="..\Shared.Outbox\Shared.Outbox.csproj" />
 		<ProjectReference Include="..\Users.Application\Users.Application.csproj" />
 		<ProjectReference Include="..\Users.Infrastructure\Users.Infrastructure.csproj" />
 	</ItemGroup>

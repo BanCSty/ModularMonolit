@@ -12,7 +12,8 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Orders.Domain\Orders.Domain.csproj" />
 		<ProjectReference Include="..\Orders.Infrastructure\Orders.Infrastructure.csproj" />
-		<ProjectReference Include="..\Shared\Shared.csproj" />
+		<ProjectReference Include="..\Shared.Events\Shared.Events.csproj" />
+		<ProjectReference Include="..\Shared.Outbox\Shared.Outbox.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Orders.Domain.Entities;
+﻿using Orders.Domain.Entities;
 using Shared.Outbox;
 
 namespace Orders.Domain.Repositories;
