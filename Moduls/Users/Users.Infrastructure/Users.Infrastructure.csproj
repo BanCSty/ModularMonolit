@@ -15,14 +15,19 @@
 		</PackageReference>
 	</ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\Orders.Domain\Orders.Domain.csproj" />
-		<ProjectReference Include="..\Shared\Shared.Abstractions\Shared.Abstractions.csproj" />
-		<ProjectReference Include="..\Shared\Shared.Infrastructure\Shared.Infrastructure.csproj" />
-	</ItemGroup>
+	
 
 	<ItemGroup>
 	  <Folder Include="Persistence\Migrations\" />
+	</ItemGroup>
+
+	
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\Shared\Shared.Abstractions\Shared.Abstractions.csproj" />
+	  <ProjectReference Include="..\..\..\Shared\Shared.Extensions\Shared.Extensions.csproj" />
+	  <ProjectReference Include="..\..\..\Shared\Shared.Outbox\Shared.Outbox.csproj" />
+	  <ProjectReference Include="..\Users.Domain\Users.Domain.csproj" />
 	</ItemGroup>
 
 </Project>

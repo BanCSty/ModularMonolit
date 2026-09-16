@@ -18,13 +18,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Orders.Presentation\Orders.Presentation.csproj" />
-	  <ProjectReference Include="..\Users.Presentation\Users.Presentation.csproj" />
+	  <Folder Include="Controllers\" />
+	  <Folder Include="data\" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Controllers\" />
-	  <Folder Include="data\" />
+	  <ProjectReference Include="..\Moduls\Orders\Orders.Infrastructure\Orders.Infrastructure.csproj" />
+	  <ProjectReference Include="..\Moduls\Orders\Orders.Presentation\Orders.Presentation.csproj" />
+	  <ProjectReference Include="..\Moduls\Users\Users.Infrastructure\Users.Infrastructure.csproj" />
+	  <ProjectReference Include="..\Moduls\Users\Users.Presentation\Users.Presentation.csproj" />
+	  <ProjectReference Include="..\Shared\Shared.Abstractions\Shared.Abstractions.csproj" />
+	  <ProjectReference Include="..\Shared\Shared.Events\Shared.Events.csproj" />
+	  <ProjectReference Include="..\Shared\Shared.Infrastructure\Shared.Infrastructure.csproj" />
 	</ItemGroup>
 
 </Project>

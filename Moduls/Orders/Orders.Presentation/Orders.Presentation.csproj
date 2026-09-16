@@ -13,9 +13,7 @@
 		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.0" />
 	</ItemGroup>
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\Shared\Shared.Abstractions\Shared.Abstractions.csproj" />
 	  <ProjectReference Include="..\Orders.Application\Orders.Application.csproj" />
-	  <ProjectReference Include="..\Orders.Infrastructure\Orders.Infrastructure.csproj" />
-	  <ProjectReference Include="..\Shared\Shared.Abstractions\Shared.Abstractions.csproj" />
-	  <ProjectReference Include="..\Shared\Shared.Extensions\Shared.Extensions.csproj" />
 	</ItemGroup>
 </Project>
