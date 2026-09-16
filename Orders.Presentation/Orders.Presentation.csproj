@@ -15,9 +15,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\Orders.Application\Orders.Application.csproj" />
 	  <ProjectReference Include="..\Orders.Infrastructure\Orders.Infrastructure.csproj" />
-	  <ProjectReference Include="..\Shared.Abstractions\Shared.Abstractions.csproj" />
-	  <ProjectReference Include="..\Shared.Events\Shared.Events.csproj" />
-	  <ProjectReference Include="..\Shared.Extensions\Shared.Extensions.csproj" />
-	  <ProjectReference Include="..\Shared.Outbox\Shared.Outbox.csproj" />
+	  <ProjectReference Include="..\Shared\Shared.Abstractions\Shared.Abstractions.csproj" />
+	  <ProjectReference Include="..\Shared\Shared.Extensions\Shared.Extensions.csproj" />
 	</ItemGroup>
 </Project>

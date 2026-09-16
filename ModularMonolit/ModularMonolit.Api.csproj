@@ -19,9 +19,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Orders.Presentation\Orders.Presentation.csproj" />
-	  <ProjectReference Include="..\Shared.Abstractions\Shared.Abstractions.csproj" />
-	  <ProjectReference Include="..\Shared.Events\Shared.Events.csproj" />
-	  <ProjectReference Include="..\Shared.Infrastructure\Shared.Infrastructure.csproj" />
 	  <ProjectReference Include="..\Users.Presentation\Users.Presentation.csproj" />
 	</ItemGroup>
 

@@ -10,9 +10,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Shared.Abstractions\Shared.Abstractions.csproj" />
-		<ProjectReference Include="..\Shared.Events\Shared.Events.csproj" />
-		<ProjectReference Include="..\Shared.Outbox\Shared.Outbox.csproj" />
+		<ProjectReference Include="..\Shared\Shared.Events\Shared.Events.csproj" />
+		<ProjectReference Include="..\Shared\Shared.Outbox\Shared.Outbox.csproj" />
 		<ProjectReference Include="..\Users.Domain\Users.Domain.csproj" />
 		<ProjectReference Include="..\Users.Infrastructure\Users.Infrastructure.csproj" />
 	</ItemGroup>
