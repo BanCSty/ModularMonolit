@@ -29,6 +29,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Moduls", "Moduls", "{5F4838EB-9C9A-4689-901B-DFE5B8A4FC80}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Users", "Users", "{DC4F6C7F-4935-47E1-BF89-CAA1FBA4ED39}"
+	ProjectSection(SolutionItems) = preProject
+		Moduls\Users\README.md = Moduls\Users\README.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Users.Application", "Moduls\Users\Users.Application\Users.Application.csproj", "{11A81F04-A1CF-47FB-BEF7-8C4E2BBB50D1}"
 EndProject
@@ -41,6 +44,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Users.Domain", "Moduls\Users\Users.Domain\Users.Domain.csproj", "{3F1CDFDD-B579-450A-AC5E-98CA84345F48}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Orders", "Orders", "{045A6699-E20A-42F7-9262-BBEC816EADDF}"
+	ProjectSection(SolutionItems) = preProject
+		Moduls\Orders\README.MD = Moduls\Orders\README.MD
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orders.Domain", "Moduls\Orders\Orders.Domain\Orders.Domain.csproj", "{42EFAA52-980C-4CDD-931A-6FA4A458A28B}"
 EndProject
