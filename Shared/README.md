@@ -53,6 +53,11 @@ Shared/
         │ Shared.Extensions    │
         └──────────────────────┘
 ```
+## Разделение ответственности
+- OutboxService — синхронный сервис, вызывается в бизнес-операции, пишет в таблицу.
+- OutboxPublisher — фоновый сервис, читает из таблицы и вызывает InMemoryEventBus.
+- InMemoryEventBus — шина, которую вызывает OutboxPublisher, чтобы доставить событие подписчикам.
+
 ## 📚 Документация по проектам
 
 - [Shared.Abstractions](./Shared.Abstractions/README.md)

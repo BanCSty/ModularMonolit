@@ -34,6 +34,7 @@ public class OutboxPublisher<TContext> : BackgroundService where TContext : DbCo
                 using var scope = _scopeFactory.CreateScope();
                 var dbContext = scope.ServiceProvider.GetRequiredService<TContext>();
 
+                // Читаем из БД
                 var messages = await dbContext.Set<OutboxMessage>()
                     .Where(m => m.PublishedAt == null && m.RetryCount < 5)
                     .OrderBy(m => m.CreatedAt)
@@ -75,6 +76,7 @@ public class OutboxPublisher<TContext> : BackgroundService where TContext : DbCo
                         _logger.LogInformation("Publishing event of type {EventType} to EventBus",
                             eventType.FullName);
 
+                        // Публикуем через EventBus (InMemoryEventBus) 
                         await _eventBus.PublishAsync(@event, eventType, stoppingToken);
 
                         message.MarkAsPublished();

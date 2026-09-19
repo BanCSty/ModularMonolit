@@ -31,6 +31,7 @@ public class OutboxService<TContext> : IOutboxService<TContext> where TContext :
         _logger.LogInformation("Adding event {EventType} to outbox", typeName);
         //Добавляем в DbContext (но еще не сохраняем в БД
         await _dbContext.Set<OutboxMessage>().AddAsync(message);
+        // SaveChanges будет вызван в UnitOfWork
     }
 
     public int GetDbContextHashCode()
