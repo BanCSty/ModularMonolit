@@ -40,15 +40,9 @@ public class OrdersModule : IModule
 
         services.AddScoped<OrderUnitOfWork>();
 
-        services.AddMediatR(cfg =>
-        {
-            cfg.RegisterServicesFromAssembly(typeof(OrdersModule).Assembly);
-        });
-
         services.AddDatabase<OrderDbContext>(configuration, "OrdersDatabase", "orders.db");
 
         services.AddScoped<IOutboxService<OrderDbContext>, OutboxService<OrderDbContext>>();
-
 
         services.AddHostedService<OutboxPublisher<OrderDbContext>>();
         services.AddScoped<UserCreatedEventHandler>();

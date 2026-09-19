@@ -48,13 +48,6 @@ public class UsersModule : IModule
 
         services.AddScoped<IOutboxService<UserDbContext>, OutboxService<UserDbContext>>();
 
-
-
-        services.AddMediatR(cfg =>
-        {
-            cfg.RegisterServicesFromAssembly(typeof(UsersModule).Assembly);
-        });
-
         services.AddHostedService<OutboxPublisher<UserDbContext>>();
         services.AddScoped<OrderCreatedEventHandler>();
         services.AddScoped<OrderDeletedEventHandler>();

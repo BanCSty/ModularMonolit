@@ -56,15 +56,12 @@ using (var scope = app.Services.CreateScope())
 }
 var eventBus = app.Services.GetRequiredService<IEventBus>();
 
-// Настраиваем подписки для каждого модуля
 foreach (var module in modules)
 {
+    // Настраиваем подписки для каждого модуля
     module.ConfigureEventSubscriptions(eventBus);
-}
 
-// Маппинг эндпоинтов модулей
-foreach (var module in modules)
-{
+    // Маппинг эндпоинтов модулей
     module.MapEndpoints(app);
 
     // Логирование зарегистрированных модулей
